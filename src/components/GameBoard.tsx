@@ -1,26 +1,11 @@
 import { FC } from "react";
-import { Turn } from "../models/Turn";
-
-const initialBoard: (string | null)[][] = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
 
 interface GameBoardProps {
   onSelectSquare: (r: number, c: number) => void;
-  turns: Turn[];
+  gameBoard: (string | null)[][];
 }
 
-const GameBoard: FC<GameBoardProps> = ({ onSelectSquare, turns }) => {
-  const gameBoard = initialBoard;
-
-  for (const turn of turns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-    gameBoard[row][col] = player;
-  }
-
+const GameBoard: FC<GameBoardProps> = ({ onSelectSquare, gameBoard }) => {
   return (
     <ol id="game-board">
       {gameBoard.map((row, rowIndex) => (
@@ -28,7 +13,10 @@ const GameBoard: FC<GameBoardProps> = ({ onSelectSquare, turns }) => {
           <ol>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={() => onSelectSquare(rowIndex, colIndex)}>
+                <button
+                  onClick={() => onSelectSquare(rowIndex, colIndex)}
+                  disabled={!!playerSymbol}
+                >
                   {playerSymbol}
                 </button>
               </li>
